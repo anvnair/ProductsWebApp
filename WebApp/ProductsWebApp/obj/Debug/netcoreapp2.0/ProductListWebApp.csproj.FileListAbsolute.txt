@@ -1,0 +1,23 @@
+C:\Splitup Code\Try-master (1)\Try-master\ProductsWebApp\bin\Debug\netcoreapp2.0\ProductListWebApp.deps.json
+C:\Splitup Code\Try-master (1)\Try-master\ProductsWebApp\bin\Debug\netcoreapp2.0\ProductListWebApp.runtimeconfig.json
+C:\Splitup Code\Try-master (1)\Try-master\ProductsWebApp\bin\Debug\netcoreapp2.0\ProductListWebApp.runtimeconfig.dev.json
+C:\Splitup Code\Try-master (1)\Try-master\ProductsWebApp\bin\Debug\netcoreapp2.0\ProductListWebApp.dll
+C:\Splitup Code\Try-master (1)\Try-master\ProductsWebApp\bin\Debug\netcoreapp2.0\ProductListWebApp.pdb
+C:\Splitup Code\Try-master (1)\Try-master\ProductsWebApp\obj\Debug\netcoreapp2.0\ProductListWebApp.csproj.CoreCompileInputs.cache
+C:\Splitup Code\Try-master (1)\Try-master\ProductsWebApp\obj\Debug\netcoreapp2.0\UserSecretsAssemblyInfo.cs
+C:\Splitup Code\Try-master (1)\Try-master\ProductsWebApp\obj\Debug\netcoreapp2.0\ProductListWebApp.AssemblyInfoInputs.cache
+C:\Splitup Code\Try-master (1)\Try-master\ProductsWebApp\obj\Debug\netcoreapp2.0\ProductListWebApp.AssemblyInfo.cs
+C:\Splitup Code\Try-master (1)\Try-master\ProductsWebApp\obj\Debug\netcoreapp2.0\ProductListWebApp.dll
+C:\Splitup Code\Try-master (1)\Try-master\ProductsWebApp\obj\Debug\netcoreapp2.0\ProductListWebApp.pdb
+C:\c2\WebApp\ProductsWebApp\bin\Debug\netcoreapp2.0\ProductListWebApp.deps.json
+C:\c2\WebApp\ProductsWebApp\bin\Debug\netcoreapp2.0\ProductListWebApp.runtimeconfig.json
+C:\c2\WebApp\ProductsWebApp\bin\Debug\netcoreapp2.0\ProductListWebApp.runtimeconfig.dev.json
+C:\c2\WebApp\ProductsWebApp\bin\Debug\netcoreapp2.0\ProductListWebApp.dll
+C:\c2\WebApp\ProductsWebApp\bin\Debug\netcoreapp2.0\ProductListWebApp.pdb
+C:\c2\WebApp\ProductsWebApp\obj\Debug\netcoreapp2.0\ProductListWebApp.csprojAssemblyReference.cache
+C:\c2\WebApp\ProductsWebApp\obj\Debug\netcoreapp2.0\ProductListWebApp.csproj.CoreCompileInputs.cache
+C:\c2\WebApp\ProductsWebApp\obj\Debug\netcoreapp2.0\UserSecretsAssemblyInfo.cs
+C:\c2\WebApp\ProductsWebApp\obj\Debug\netcoreapp2.0\ProductListWebApp.AssemblyInfoInputs.cache
+C:\c2\WebApp\ProductsWebApp\obj\Debug\netcoreapp2.0\ProductListWebApp.AssemblyInfo.cs
+C:\c2\WebApp\ProductsWebApp\obj\Debug\netcoreapp2.0\ProductListWebApp.dll
+C:\c2\WebApp\ProductsWebApp\obj\Debug\netcoreapp2.0\ProductListWebApp.pdb

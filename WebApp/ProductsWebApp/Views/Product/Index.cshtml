@@ -1,0 +1,37 @@
+﻿@model IEnumerable<ProductWebApp.Models.ProductItem>
+
+@{
+    ViewBag.Title = "Product List";
+}
+
+<h3>Add a Product</h3>
+
+@if (ViewBag.ErrorMessage == null)
+{
+<form name="input" action="Product" method="post">
+    Add New Product: <input type="text" name="item">
+    <input type="submit" value="Click to Add New Product">
+</form>
+}
+
+<table class="table table-bordered table-striped">
+    <tr>
+        <th>Available Products</th>
+    </tr>
+    @foreach (var i in Model)
+    {
+        <tr>
+            <td>@i.Title</td>
+        </tr>
+    }
+</table>
+
+@if (ViewBag.ErrorMessage == "AuthorizationRequired")
+{
+<p>You have to sign-in to see your Product list. Click @Html.ActionLink("here", "Index", "Product", new { reauth = true }, null) to sign-in.</p>
+}
+
+@if (ViewBag.ErrorMessage == "UnexpectedError")
+{
+<p>An unexpected error occurred while retrieving your Product list.  Please try again.  You may need to sign-in.</p>
+}

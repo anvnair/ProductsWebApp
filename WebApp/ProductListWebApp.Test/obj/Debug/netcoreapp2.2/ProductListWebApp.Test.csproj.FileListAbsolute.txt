@@ -1,0 +1,34 @@
+C:\Splitup Code\Try-master (1)\Try-master\ProductListWebApp.Test\bin\Debug\netcoreapp2.2\NUnit3.TestAdapter.dll
+C:\Splitup Code\Try-master (1)\Try-master\ProductListWebApp.Test\bin\Debug\netcoreapp2.2\NUnit3.TestAdapter.pdb
+C:\Splitup Code\Try-master (1)\Try-master\ProductListWebApp.Test\bin\Debug\netcoreapp2.2\nunit.engine.netstandard.dll
+C:\Splitup Code\Try-master (1)\Try-master\ProductListWebApp.Test\bin\Debug\netcoreapp2.2\ProductListWebApp.Test.deps.json
+C:\Splitup Code\Try-master (1)\Try-master\ProductListWebApp.Test\bin\Debug\netcoreapp2.2\ProductListWebApp.Test.runtimeconfig.json
+C:\Splitup Code\Try-master (1)\Try-master\ProductListWebApp.Test\bin\Debug\netcoreapp2.2\ProductListWebApp.Test.runtimeconfig.dev.json
+C:\Splitup Code\Try-master (1)\Try-master\ProductListWebApp.Test\bin\Debug\netcoreapp2.2\ProductListWebApp.Test.dll
+C:\Splitup Code\Try-master (1)\Try-master\ProductListWebApp.Test\bin\Debug\netcoreapp2.2\ProductListWebApp.Test.pdb
+C:\Splitup Code\Try-master (1)\Try-master\ProductListWebApp.Test\bin\Debug\netcoreapp2.2\ProductListWebApp.dll
+C:\Splitup Code\Try-master (1)\Try-master\ProductListWebApp.Test\bin\Debug\netcoreapp2.2\ProductListWebApp.pdb
+C:\Splitup Code\Try-master (1)\Try-master\ProductListWebApp.Test\obj\Debug\netcoreapp2.2\ProductListWebApp.Test.csprojAssemblyReference.cache
+C:\Splitup Code\Try-master (1)\Try-master\ProductListWebApp.Test\obj\Debug\netcoreapp2.2\ProductListWebApp.Test.csproj.CoreCompileInputs.cache
+C:\Splitup Code\Try-master (1)\Try-master\ProductListWebApp.Test\obj\Debug\netcoreapp2.2\ProductListWebApp.Test.AssemblyInfoInputs.cache
+C:\Splitup Code\Try-master (1)\Try-master\ProductListWebApp.Test\obj\Debug\netcoreapp2.2\ProductListWebApp.Test.AssemblyInfo.cs
+C:\Splitup Code\Try-master (1)\Try-master\ProductListWebApp.Test\obj\Debug\netcoreapp2.2\ProductListWebApp.Test.csproj.CopyComplete
+C:\Splitup Code\Try-master (1)\Try-master\ProductListWebApp.Test\obj\Debug\netcoreapp2.2\ProductListWebApp.Test.dll
+C:\Splitup Code\Try-master (1)\Try-master\ProductListWebApp.Test\obj\Debug\netcoreapp2.2\ProductListWebApp.Test.pdb
+C:\c2\WebApp\ProductListWebApp.Test\bin\Debug\netcoreapp2.2\NUnit3.TestAdapter.dll
+C:\c2\WebApp\ProductListWebApp.Test\bin\Debug\netcoreapp2.2\NUnit3.TestAdapter.pdb
+C:\c2\WebApp\ProductListWebApp.Test\bin\Debug\netcoreapp2.2\nunit.engine.netstandard.dll
+C:\c2\WebApp\ProductListWebApp.Test\bin\Debug\netcoreapp2.2\ProductListWebApp.Test.deps.json
+C:\c2\WebApp\ProductListWebApp.Test\bin\Debug\netcoreapp2.2\ProductListWebApp.Test.runtimeconfig.json
+C:\c2\WebApp\ProductListWebApp.Test\bin\Debug\netcoreapp2.2\ProductListWebApp.Test.runtimeconfig.dev.json
+C:\c2\WebApp\ProductListWebApp.Test\bin\Debug\netcoreapp2.2\ProductListWebApp.Test.dll
+C:\c2\WebApp\ProductListWebApp.Test\bin\Debug\netcoreapp2.2\ProductListWebApp.Test.pdb
+C:\c2\WebApp\ProductListWebApp.Test\bin\Debug\netcoreapp2.2\ProductListWebApp.dll
+C:\c2\WebApp\ProductListWebApp.Test\bin\Debug\netcoreapp2.2\ProductListWebApp.pdb
+C:\c2\WebApp\ProductListWebApp.Test\obj\Debug\netcoreapp2.2\ProductListWebApp.Test.csprojAssemblyReference.cache
+C:\c2\WebApp\ProductListWebApp.Test\obj\Debug\netcoreapp2.2\ProductListWebApp.Test.csproj.CoreCompileInputs.cache
+C:\c2\WebApp\ProductListWebApp.Test\obj\Debug\netcoreapp2.2\ProductListWebApp.Test.AssemblyInfoInputs.cache
+C:\c2\WebApp\ProductListWebApp.Test\obj\Debug\netcoreapp2.2\ProductListWebApp.Test.AssemblyInfo.cs
+C:\c2\WebApp\ProductListWebApp.Test\obj\Debug\netcoreapp2.2\ProductListWebApp.Test.csproj.CopyComplete
+C:\c2\WebApp\ProductListWebApp.Test\obj\Debug\netcoreapp2.2\ProductListWebApp.Test.dll
+C:\c2\WebApp\ProductListWebApp.Test\obj\Debug\netcoreapp2.2\ProductListWebApp.Test.pdb
