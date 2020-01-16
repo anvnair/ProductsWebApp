@@ -27,9 +27,11 @@ namespace ProductWebApp.Controllers
     {
         public AuthenticationResult result { get; set; }
         IProductAuthenticationService _auth;
-        public ProductController(IProductAuthenticationService auth)
+        IProductService _productService;
+        public ProductController(IProductAuthenticationService auth, IProductService ProductService)
         {
             _auth = auth;
+            _productService = ProductService;
         }
         // GET: /<controller>/
         /// <summary>Indexes this instance.</summary>
@@ -43,11 +45,8 @@ namespace ProductWebApp.Controllers
             {
 
                 result = await _auth.SetAuth();
-                // Retrieve the user's Product List.
-                HttpClient client = new HttpClient();
-                HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, AzureAdOptions.Settings.ProductBaseAddress + "/api/Product");
-                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", result.AccessToken);
-                HttpResponseMessage response = await client.SendAsync(request);
+
+                HttpResponseMessage response = await _productService.GetProductsList(result.AccessToken);
 
                 // Return the Product List in the view.
                 if (response.IsSuccessStatusCode)
