@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Clients.ActiveDirectory;
 using Newtonsoft.Json;
+using ProductListWebApp.Services;
 using ProductWebApp.Models;
 #endregion
 
@@ -24,6 +25,12 @@ namespace ProductWebApp.Controllers
     [Authorize]
     public class ProductController : Controller
     {
+        public AuthenticationResult result { get; set; }
+        IProductAuthenticationService _auth;
+        public ProductController(IProductAuthenticationService auth)
+        {
+            _auth = auth;
+        }
         // GET: /<controller>/
         /// <summary>Indexes this instance.</summary>
         /// <returns></returns>
@@ -34,14 +41,8 @@ namespace ProductWebApp.Controllers
 
             try
             {
-                // To fetch the already logged in user object
-                string userObjectID = User != null ? (User.FindFirst("http://schemas.microsoft.com/identity/claims/objectidentifier"))?.Value : "1";
 
-                // Using ADAL.Net, get a bearer token to access the ProductService
-                AuthenticationContext authContext = new AuthenticationContext(AzureAdOptions.Settings.Authority, new NaiveSessionCache(userObjectID, HttpContext.Session));
-                ClientCredential credential = new ClientCredential(AzureAdOptions.Settings.ClientId, AzureAdOptions.Settings.ClientSecret);
-                result = await authContext.AcquireTokenSilentAsync(AzureAdOptions.Settings.ProductResourceId, credential, new UserIdentifier(userObjectID, UserIdentifierType.UniqueId));
-
+                result = await _auth.SetAuth();
                 // Retrieve the user's Product List.
                 HttpClient client = new HttpClient();
                 HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, AzureAdOptions.Settings.ProductBaseAddress + "/api/Product");
@@ -70,10 +71,10 @@ namespace ProductWebApp.Controllers
                 // If the call failed with access denied, then drop the current access token from the cache, 
                 //     and show the user an error indicating they might need to sign-in again.
                 //
-                if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
-                {
-                    return ProcessUnauthorized(itemList, authContext);
-                }
+                //if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+                //{
+                //    return ProcessUnauthorized(itemList, authContext);
+                //}
             }
             catch (Exception ex)
             {
