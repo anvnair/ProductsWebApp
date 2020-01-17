@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using ProductListWebApp.Services;
+using ProductListWebApp.Utils;
 
 namespace ProductApp
 {
@@ -23,7 +24,7 @@ namespace ProductApp
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddHttpClient<IProductService, ProductService>();
-            //services.a
+            services.AddTransient<ISerializationHelper, SerializationHelper>();
             services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
             services.AddTransient(typeof(IProductAuthenticationService), typeof(ProductAuthenticationService));
             services.AddAuthentication(sharedOptions =>

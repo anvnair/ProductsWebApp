@@ -8,6 +8,6 @@ namespace ProductListWebApp.Services
 {
     public interface IProductAuthenticationService
     {
-         Task<AuthenticationResult> SetAuth();
+         Task<AuthenticationResult> AcquireAuthenticationResult();
     }
 }

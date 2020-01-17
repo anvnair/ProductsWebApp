@@ -25,7 +25,7 @@ namespace ProductListWebApp.Services
 
         public ISession _session { get; private set; }
 
-        public async Task<AuthenticationResult> SetAuth()
+        public async Task<AuthenticationResult> AcquireAuthenticationResult()
         {
             // To fetch the already logged in user object
             var claim = (ClaimsPrincipal)Thread.CurrentPrincipal;

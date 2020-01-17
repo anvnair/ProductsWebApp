@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Clients.ActiveDirectory;
 using Newtonsoft.Json;
 using ProductListWebApp.Services;
+using ProductListWebApp.Utils;
 using ProductWebApp.Models;
 #endregion
 
@@ -26,44 +27,42 @@ namespace ProductWebApp.Controllers
     public class ProductController : Controller
     {
         public AuthenticationResult result { get; set; }
-        IProductAuthenticationService _auth;
+        IProductAuthenticationService _authenticationService;
         IProductService _productService;
-        public ProductController(IProductAuthenticationService auth, IProductService ProductService)
+        ISerializationHelper _serializationHelper;
+        public ProductController(IProductAuthenticationService authenticationService, IProductService ProductService, ISerializationHelper serializationHelper)
         {
-            _auth = auth;
+            _authenticationService = authenticationService;
             _productService = ProductService;
+            _serializationHelper = serializationHelper;
         }
         // GET: /<controller>/
         /// <summary>Indexes this instance.</summary>
         /// <returns></returns>
         public async Task<IActionResult> Index()
         {
-            AuthenticationResult result = null;
-            List<ProductItem> itemList = new List<ProductItem>();
+            AuthenticationResult authenticationResult = null;
+            List<ProductItem> products = new List<ProductItem>();
 
             try
             {
-
-                result = await _auth.SetAuth();
-
-                HttpResponseMessage response = await _productService.GetProductsList(result.AccessToken);
+                authenticationResult = await _authenticationService.AcquireAuthenticationResult();
+                HttpResponseMessage response = await _productService.GetProductsList(authenticationResult.AccessToken);
 
                 // Return the Product List in the view.
                 if (response.IsSuccessStatusCode)
                 {
-                    List<Dictionary<String, String>> responseElements = new List<Dictionary<String, String>>();
-                    JsonSerializerSettings settings = new JsonSerializerSettings();
-                    String responseString = await response.Content.ReadAsStringAsync();
-                    responseElements = JsonConvert.DeserializeObject<List<Dictionary<String, String>>>(responseString, settings);
-                    foreach (Dictionary<String, String> responseElement in responseElements)
-                    {
-                        ProductItem newItem = new ProductItem();
-                        newItem.Title = responseElement["title"];
-                        newItem.Owner = responseElement["owner"];
-                        itemList.Add(newItem);
-                    }
+                    List<Dictionary<String, String>> productsAvailableInStore = _serializationHelper.Deserialize(await response.Content.ReadAsStringAsync());
 
-                    return View(itemList);
+                    productsAvailableInStore.ForEach(product =>
+                    {
+                        products.Add(new ProductItem
+                        {
+                            Title = product["title"],
+                            Owner = product["owner"]
+                        });
+                    });
+                    return View(products);
                 }
 
                 //
@@ -94,9 +93,9 @@ namespace ProductWebApp.Controllers
                 //
                 ProductItem newItem = new ProductItem();
                 newItem.Title = "(Sign-in required to view Product list.)";
-                itemList.Add(newItem);
+                products.Add(newItem);
                 ViewBag.ErrorMessage = "AuthorizationRequired";
-                return View(itemList);
+                return View(products);
             }
 
             //
