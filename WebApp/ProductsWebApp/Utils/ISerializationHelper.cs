@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using ProductWebApp.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +9,7 @@ namespace ProductListWebApp.Utils
 {
     public interface ISerializationHelper
     {
-        List<Dictionary<string, string>> Deserialize(string DatatoDeserialize);
+        List<ProductItem> Deserialize(string DatatoDeserialize);
+        string ConvertObjectToJSON(object item);
     }
 }

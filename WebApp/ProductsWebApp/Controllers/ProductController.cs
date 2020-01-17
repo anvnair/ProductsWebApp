@@ -52,17 +52,8 @@ namespace ProductWebApp.Controllers
                 // Return the Product List in the view.
                 if (response.IsSuccessStatusCode)
                 {
-                    List<Dictionary<String, String>> productsAvailableInStore = _serializationHelper.Deserialize(await response.Content.ReadAsStringAsync());
-
-                    productsAvailableInStore.ForEach(product =>
-                    {
-                        products.Add(new ProductItem
-                        {
-                            Title = product["title"],
-                            Owner = product["owner"]
-                        });
-                    });
-                    return View(products);
+                    var _productList = _serializationHelper.Deserialize(await response.Content.ReadAsStringAsync());
+                    return View(_productList);
                 }
 
                 //
@@ -111,31 +102,17 @@ namespace ProductWebApp.Controllers
             {
                 // Retrieve the user's tenantID and access token since they are parameters used to call the Product service.
 
-                AuthenticationResult result = null;
+                AuthenticationResult authenticationResult = null;
                 List<ProductItem> itemList = new List<ProductItem>();
 
                 try
-                {
-                    string userObjectID = (User.FindFirst("http://schemas.microsoft.com/identity/claims/objectidentifier"))?.Value;
-                    AuthenticationContext authContext = new AuthenticationContext(AzureAdOptions.Settings.Authority, new NaiveSessionCache(userObjectID, HttpContext.Session));
-                    ClientCredential credential = new ClientCredential(AzureAdOptions.Settings.ClientId, AzureAdOptions.Settings.ClientSecret);
-                    result = await authContext.AcquireTokenSilentAsync(AzureAdOptions.Settings.ProductResourceId, credential, new UserIdentifier(userObjectID, UserIdentifierType.UniqueId));
+                { 
+                    authenticationResult = await _authenticationService.AcquireAuthenticationResult();
 
-                    // Forms encode Product item, to POST to the Product list web api.
-                    HttpContent content = new StringContent(JsonConvert.SerializeObject(new { Title = item }), System.Text.Encoding.UTF8, "application/json");
+                    HttpResponseMessage createProductResponse = await _productService.CreateProduct(_serializationHelper.ConvertObjectToJSON(item), authenticationResult.AccessToken);
 
-                    // Add the item to user's Product List.
-                    //
-                    HttpClient client = new HttpClient();
-                    HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, AzureAdOptions.Settings.ProductBaseAddress + "/api/Product");
-                    request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", result.AccessToken);
-                    request.Content = content;
-                    HttpResponseMessage response = await client.SendAsync(request);
-
-
-                    // Return the Product List in the view.
-                    //
-                    if (response.IsSuccessStatusCode)
+                    // Return the Product List in the view.                    
+                    if (createProductResponse.IsSuccessStatusCode)
                     {
                         return RedirectToAction("Index");
                     }
@@ -144,9 +121,9 @@ namespace ProductWebApp.Controllers
                     // If the call failed with access denied, then drop the current access token from the cache, 
                     //     and show the user an error indicating they might need to sign-in again.
                     //
-                    if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+                    if (createProductResponse.StatusCode == System.Net.HttpStatusCode.Unauthorized)
                     {
-                        return ProcessUnauthorized(itemList, authContext);
+                        return ProcessUnauthorized();
                     }
                 }
                 catch (Exception)
@@ -172,16 +149,16 @@ namespace ProductWebApp.Controllers
         /// <param name="itemList">The item list.</param>
         /// <param name="authContext">The authentication context.</param>
         /// <returns></returns>
-        private ActionResult ProcessUnauthorized(List<ProductItem> itemList, AuthenticationContext authContext)
+        private ActionResult ProcessUnauthorized()
         {
-            var ProductTokens = authContext.TokenCache.ReadItems().Where(a => a.Resource == AzureAdOptions.Settings.ProductResourceId);
-            foreach (TokenCacheItem tci in ProductTokens)
-                authContext.TokenCache.DeleteItem(tci);
-
-            ViewBag.ErrorMessage = "UnexpectedError";
-            ProductItem newItem = new ProductItem();
-            newItem.Title = "(No items in list)";
-            itemList.Add(newItem);
+            List<ProductItem> itemList = new List<ProductItem>();
+            if (_authenticationService.FlushProductsAuthenticationCache())
+            {
+                ViewBag.ErrorMessage = "UnexpectedError";
+                ProductItem newItem = new ProductItem();
+                newItem.Title = "(No items in list)";
+                itemList.Add(newItem);
+            }
             return View(itemList);
         }
     }

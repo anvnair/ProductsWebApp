@@ -10,5 +10,6 @@ namespace ProductListWebApp.Services
     public interface IProductService
     {
         Task<HttpResponseMessage> GetProductsList(string AccessToken);
+        Task<HttpResponseMessage> CreateProduct(string NewProduct, string AccessToken);
     }
 }

@@ -9,5 +9,6 @@ namespace ProductListWebApp.Services
     public interface IProductAuthenticationService
     {
          Task<AuthenticationResult> AcquireAuthenticationResult();
+        bool FlushProductsAuthenticationCache();
     }
 }

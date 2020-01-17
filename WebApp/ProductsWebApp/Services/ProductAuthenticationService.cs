@@ -39,5 +39,24 @@ namespace ProductListWebApp.Services
             var result = await authContext.AcquireTokenSilentAsync(AzureAdOptions.Settings.ProductResourceId, credential, new UserIdentifier(userObjectID, UserIdentifierType.UniqueId));
             return result;
         }
+
+        public bool FlushProductsAuthenticationCache()
+        {
+            bool isSuccess = true;
+
+            try
+            {
+                string userObjectID = _context.HttpContext.User != null ? (_context.HttpContext.User.FindFirst("http://schemas.microsoft.com/identity/claims/objectidentifier"))?.Value : "1";
+                AuthenticationContext authContext = new AuthenticationContext(AzureAdOptions.Settings.Authority, new NaiveSessionCache(userObjectID, _context.HttpContext.Session));
+                var ProductTokens = authContext.TokenCache.ReadItems().Where(a => a.Resource == AzureAdOptions.Settings.ProductResourceId);
+                foreach (TokenCacheItem tci in ProductTokens)
+                    authContext.TokenCache.DeleteItem(tci);
+            }
+            catch (Exception ex)
+            {
+                isSuccess = false;
+            }
+            return isSuccess;
+        }
     }
 }

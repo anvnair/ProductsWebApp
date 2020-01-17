@@ -29,5 +29,13 @@ namespace ProductListWebApp.Services
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", AccessToken);
             return await _client.SendAsync(request);
         }
+        public async Task<HttpResponseMessage> CreateProduct(string NewProduct,string AccessToken)
+        {
+            HttpContent requestContentProduct = new StringContent(NewProduct, System.Text.Encoding.UTF8, "application/json");
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, AzureAdOptions.Settings.ProductBaseAddress + "/api/Product");
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", AccessToken);
+            request.Content = requestContentProduct;
+            return await _client.SendAsync(request);
+        }
     }
 }
