@@ -60,10 +60,10 @@ namespace ProductWebApp.Controllers
                 // If the call failed with access denied, then drop the current access token from the cache, 
                 //     and show the user an error indicating they might need to sign-in again.
                 //
-                //if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
-                //{
-                //    return ProcessUnauthorized(itemList, authContext);
-                //}
+                if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+                {
+                    return ProcessUnauthorized();
+                }
             }
             catch (Exception ex)
             {
