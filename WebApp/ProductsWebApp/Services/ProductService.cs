@@ -32,19 +32,15 @@ namespace ProductListWebApp.Services
 
         public async Task<HttpResponseMessage> GetProductsList(string AccessToken)
         {
-            return await _client.SendAsync(_httpHelperService.GetHttpRequestMessageForGet(AccessToken, "/api/Product"));
+            var httpRequestMessage = _httpHelperService.GetHttpRequestMessageForGet(AccessToken, "/api/Product");
+            return await _client.SendAsync(httpRequestMessage);
         }
-        //public async Task<HttpResponseMessage> CreateProduct(string NewProduct, string AccessToken)
-        //{
-        //    return await _client.SendAsync(_httpHelperService.GetHttpRequestMessageForPost(NewProduct, AccessToken, "api / Product"));
-        //}
+
         public async Task<HttpResponseMessage> CreateProduct(string NewProduct, string AccessToken)
         {
-            HttpContent requestContentProduct = new StringContent(NewProduct, System.Text.Encoding.UTF8, "application/json");
-            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, AzureAdOptions.Settings.ProductBaseAddress + "/api/Product");
-            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", AccessToken);
-            request.Content = requestContentProduct;
-            return await _client.SendAsync(request);
+            var httpRequestMessage = _httpHelperService.GetHttpRequestMessageForPost(NewProduct, AccessToken, "/api/Product");
+            return await _client.SendAsync(httpRequestMessage);
+
         }
     }
 }
