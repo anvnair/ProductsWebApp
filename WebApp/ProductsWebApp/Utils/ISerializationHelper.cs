@@ -9,7 +9,7 @@ namespace ProductListWebApp.Utils
 {
     public interface ISerializationHelper
     {
-        List<ProductItem> Deserialize(string DatatoDeserialize);
+        List<ProductItemViewModel> Deserialize(string DatatoDeserialize);
         string ConvertObjectToJSON(object item);
     }
 }

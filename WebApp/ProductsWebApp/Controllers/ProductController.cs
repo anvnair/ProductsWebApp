@@ -42,7 +42,7 @@ namespace ProductWebApp.Controllers
         public async Task<IActionResult> Index()
         {
             IAuthenticationResultWrapper authenticationResult = null;
-            List<ProductItem> products = new List<ProductItem>();
+            List<ProductItemViewModel> products = new List<ProductItemViewModel>();
 
             try
             {
@@ -82,7 +82,7 @@ namespace ProductWebApp.Controllers
                 //
                 // The user needs to re-authorize.  Show them a message to that effect.
                 //
-                ProductItem newItem = new ProductItem();
+                ProductItemViewModel newItem = new ProductItemViewModel();
                 newItem.Title = "(Sign-in required to view Product list.)";
                 products.Add(newItem);
                 ViewBag.ErrorMessage = "AuthorizationRequired";
@@ -103,7 +103,7 @@ namespace ProductWebApp.Controllers
                 // Retrieve the user's tenantID and access token since they are parameters used to call the Product service.
 
                 IAuthenticationResultWrapper authenticationResult = null;
-                List<ProductItem> itemList = new List<ProductItem>();
+                List<ProductItemViewModel> itemList = new List<ProductItemViewModel>();
 
                 try
                 {
@@ -131,7 +131,7 @@ namespace ProductWebApp.Controllers
                     //
                     // The user needs to re-authorize.  Show them a message to that effect.
                     //
-                    ProductItem newItem = new ProductItem();
+                    ProductItemViewModel newItem = new ProductItemViewModel();
                     newItem.Title = "(No items in list)";
                     itemList.Add(newItem);
                     ViewBag.ErrorMessage = "AuthorizationRequired";
@@ -151,11 +151,11 @@ namespace ProductWebApp.Controllers
         /// <returns></returns>
         private ActionResult ProcessUnauthorized()
         {
-            List<ProductItem> itemList = new List<ProductItem>();
+            List<ProductItemViewModel> itemList = new List<ProductItemViewModel>();
             if (_authenticationService.FlushProductsAuthenticationCache())
             {
                 ViewBag.ErrorMessage = "UnexpectedError";
-                ProductItem newItem = new ProductItem();
+                ProductItemViewModel newItem = new ProductItemViewModel();
                 newItem.Title = "(No items in list)";
                 itemList.Add(newItem);
             }

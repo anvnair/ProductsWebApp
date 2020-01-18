@@ -9,10 +9,10 @@ namespace ProductListWebApp.Utils
 {
     public class SerializationHelper : ISerializationHelper
     {
-        public List<ProductItem> Deserialize(string DatatoDeserialize)
+        public List<ProductItemViewModel> Deserialize(string DatatoDeserialize)
         {
             JsonSerializerSettings settings = new JsonSerializerSettings();
-            return JsonConvert.DeserializeObject<List<ProductItem>>(DatatoDeserialize);
+            return JsonConvert.DeserializeObject<List<ProductItemViewModel>>(DatatoDeserialize);
         }
         public string ConvertObjectToJSON(object item)
         {
