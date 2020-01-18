@@ -1,4 +1,5 @@
 ﻿using Microsoft.IdentityModel.Clients.ActiveDirectory;
+using ProductListWebApp.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +9,7 @@ namespace ProductListWebApp.Services
 {
     public interface IProductAuthenticationService
     {
-         Task<AuthenticationResult> AcquireAuthenticationResult();
+        Task<IAuthenticationResultWrapper> AcquireAuthenticationResult();
         bool FlushProductsAuthenticationCache();
     }
 }

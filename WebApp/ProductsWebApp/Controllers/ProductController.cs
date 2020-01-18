@@ -41,7 +41,7 @@ namespace ProductWebApp.Controllers
         /// <returns></returns>
         public async Task<IActionResult> Index()
         {
-            AuthenticationResult authenticationResult = null;
+            IAuthenticationResultWrapper authenticationResult = null;
             List<ProductItem> products = new List<ProductItem>();
 
             try
@@ -102,11 +102,11 @@ namespace ProductWebApp.Controllers
             {
                 // Retrieve the user's tenantID and access token since they are parameters used to call the Product service.
 
-                AuthenticationResult authenticationResult = null;
+                IAuthenticationResultWrapper authenticationResult = null;
                 List<ProductItem> itemList = new List<ProductItem>();
 
                 try
-                { 
+                {
                     authenticationResult = await _authenticationService.AcquireAuthenticationResult();
 
                     HttpResponseMessage createProductResponse = await _productService.CreateProduct(_serializationHelper.ConvertObjectToJSON(item), authenticationResult.AccessToken);
