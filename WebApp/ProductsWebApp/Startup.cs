@@ -25,7 +25,7 @@ namespace ProductApp
         {
             services.AddTransient<ISerializationHelper, SerializationHelper>();
             services.AddTransient<IHttpHelperService, HttpHelperService>();
-            services.AddHttpClient<IProductService, ProductService>();
+            services.AddHttpClient<IProductService, ProductServices>();
             services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
             services.AddTransient(typeof(IProductAuthenticationService), typeof(ProductAuthenticationService));
 

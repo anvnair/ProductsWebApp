@@ -17,13 +17,13 @@ using ProductWebApp.Models;
 
 namespace ProductListWebApp.Services
 {
-    public class ProductService : IProductService
+    public class ProductServices : IProductService
     {
         private readonly HttpClient _client;
         private readonly ISerializationHelper _serializationHelper;
         private readonly IHttpHelperService _httpHelperService;
 
-        public ProductService(HttpClient client, ISerializationHelper serializationHelper, IHttpHelperService httpHelperService)
+        public ProductServices(HttpClient client, ISerializationHelper serializationHelper, IHttpHelperService httpHelperService)
         {
             _client = client;
             _serializationHelper = serializationHelper;
