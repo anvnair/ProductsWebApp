@@ -1,19 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿#region Namespaces
+using System;
 using Microsoft.AspNetCore.Http;
 using Microsoft.IdentityModel.Clients.ActiveDirectory;
+#endregion
 
+/// <summary>
+/// Naive session
+/// </summary>
 namespace ProductWebApp
 {
     public class NaiveSessionCache : TokenCache, INaiveSessionCache
     {
+        #region Variables
         private static readonly object FileLock = new object();
         string UserObjectId = string.Empty;
         string CacheId = string.Empty;
         ISession Session = null;
+        #endregion
 
+
+        /// <summary>Sets up naive session cache.</summary>
+        /// <param name="userId">The user identifier.</param>
+        /// <param name="session">The session.</param>
+        /// <returns></returns>
         public bool SetUpNaiveSessionCache(string userId, ISession session)
         {
             UserObjectId = userId;
@@ -26,6 +35,8 @@ namespace ProductWebApp
         }
 
 
+        /// <summary>Loads this instance.</summary>
+        /// <returns></returns>
         public bool Load()
         {
             lock (FileLock)

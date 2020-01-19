@@ -1,12 +1,14 @@
-﻿using Microsoft.IdentityModel.Clients.ActiveDirectory;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿#region Namespaces
 using System.Net.Http;
-using System.Threading.Tasks;
 
+#endregion
+
+/// <summary>
+/// Product List WebApp Services
+/// </summary>
 namespace ProductListWebApp.Services
 {
+    /// <summary>Http Helper Service</summary>
     public interface IHttpHelperService
     {
         HttpRequestMessage GetHttpRequestMessageForGet(string AccessToken, string Url);

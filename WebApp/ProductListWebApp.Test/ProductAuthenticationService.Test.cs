@@ -85,13 +85,13 @@ namespace ProductsApp.Test
             authResult.SetupGet(p => p.AccessToken).Returns(accessToken);
 
             productAuthenticationServiceMock.Setup(s => s.IsNaiveCached("user", context.Session)).Returns(true);
-            // productAuthenticationServiceMock.Setup(s => s.GetUserIdentifier()).Returns(new UserIdentifier("id", UserIdentifierType.UniqueId) { });
+           
             productAuthenticationServiceMock.Setup(s => s.AcquireAuthenticationResult()).ReturnsAsync(authResult.Object);
 
             //Act
             var productAuthenticationService = new ProductAuthenticationService(httpContextAccessorMock.Object, _azureAD.Object, _naiveCacheMock.Object, authContextMock.Object);
 
-            //Assert for not null
+            //Assert 
             Assert.IsNotNull(productAuthenticationService._adSettings);
              
         }

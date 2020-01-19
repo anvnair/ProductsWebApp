@@ -1,30 +1,19 @@
+#region Namespaces
 using System;
-using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Security.Claims;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using MediatR;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Clients.ActiveDirectory;
 using Moq;
 using Moq.Protected;
-using Newtonsoft.Json;
-using NUnit.Framework;
-using ProductListWebApp.Models;
-using ProductListWebApp.Services;
-using ProductListWebApp.Utils;
-using ProductWebApp.Controllers;
-using ProductWebApp.Models;
 
+#endregion
+/// <summary>
+/// ProductControllerWebApp Test
+/// </summary>
 namespace ProductControllerWebApp.Test
 {
+    /// <summary></summary>
     public class HttpClientHelper
     {
         public HttpClient GetTestHttpClient()

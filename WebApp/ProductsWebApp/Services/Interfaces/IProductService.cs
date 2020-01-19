@@ -1,12 +1,15 @@
-﻿using Microsoft.IdentityModel.Clients.ActiveDirectory;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿#region Namespaces
 using System.Net.Http;
 using System.Threading.Tasks;
+#endregion
 
+
+/// <summary>
+///  Product List Web App Services
+/// </summary>
 namespace ProductListWebApp.Services
 {
+    /// <summary>Product Service</summary>
     public interface IProductService
     {
         Task<HttpResponseMessage> GetProductsList(string AccessToken);

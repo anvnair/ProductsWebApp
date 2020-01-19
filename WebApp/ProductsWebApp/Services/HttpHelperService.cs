@@ -1,21 +1,19 @@
-﻿using System;
-using System.Web;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿#region Namespaces
+using System;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc.Core;
-using Microsoft.IdentityModel.Clients.ActiveDirectory;
-using ProductWebApp;
-using System.Security.Claims;
-using System.Threading;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using ProductListWebApp.Utils;
 
+#endregion
+
+
+/// <summary>
+/// ProductList WebApp Services
+/// </summary>
 namespace ProductListWebApp.Services
 {
+    /// <summary></summary>
+    /// <seealso cref="ProductListWebApp.Services.IHttpHelperService" />
     public class HttpHelperService : IHttpHelperService
     {
         public HttpRequestMessage GetHttpRequestMessageForGet(string AccessToken, string Url)
@@ -32,6 +30,12 @@ namespace ProductListWebApp.Services
             }
         }
 
+
+        /// <summary>Gets the HTTP request message for post.</summary>
+        /// <param name="NewProduct">The new product.</param>
+        /// <param name="AccessToken">The access token.</param>
+        /// <param name="url">The URL.</param>
+        /// <returns></returns>
         public HttpRequestMessage GetHttpRequestMessageForPost(string NewProduct, string AccessToken, string url)
         {
             try

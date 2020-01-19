@@ -1,10 +1,16 @@
-﻿using System;
+﻿#region Namespaces
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+#endregion
 
+/// <summary>
+/// Names space for ProductListWebApp.Models
+/// </summary>
 namespace ProductListWebApp.Models
 {
+    /// <summary>Azure Active Directory</summary>
     public class AzureActiveDirectory
     {
         public string Instance { get; set; }
