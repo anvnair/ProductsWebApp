@@ -28,21 +28,15 @@ namespace ProductListWebApp.Services
             }
         }
 
-        public AuthenticationContextWrapper authContextWrapperObject { get; set; }
-        public bool isNaiveCached { get; set; }
-
+        public AuthenticationContextWrapper authContext { get; set; }
         public ProductAuthenticationService(IHttpContextAccessor context, IAzureAD ad, INaiveSessionCache naiveCache, IAuthenticationContextWrapper authWrapper)
         {
             _context = context;
             _ad = ad;
             _adSettings = _ad.InitAzureSettings();
             _userObjectID = _ad.GetUserID(_context);
-            _naiveCache = naiveCache;         
+            _naiveCache = naiveCache;
             _authWrapper = authWrapper;
-        }
-        public bool IsNaiveCached(string userId,ISession session)
-        {
-            return _naiveCache.SetUpNaiveSessionCache(userId, _context.HttpContext.Session);
         }
         private readonly IHttpContextAccessor _context;
         private readonly IAzureAD _ad;
@@ -53,25 +47,14 @@ namespace ProductListWebApp.Services
 
         public ISession _session { get; private set; }
 
-        public AuthenticationContextWrapper GetAuthContext()
-        {
-            return new AuthenticationContextWrapper();
-        }
         public async Task<IAuthenticationResultWrapper> AcquireAuthenticationResult()
         {
             // To fetch the already logged in user object
-            var claim = (ClaimsPrincipal)Thread.CurrentPrincipal;            
-            isNaiveCached = IsNaiveCached(userObjectID, _context.HttpContext.Session);
-            this.authContextWrapperObject = _authWrapper.SetAuthenticationContext(_adSettings.Authority, _naiveCache.SetUpNaiveSessionCache(userObjectID, _context.HttpContext.Session));
+            var claim = (ClaimsPrincipal)Thread.CurrentPrincipal;
+            this.authContext = _authWrapper.SetAuthenticationContext(_adSettings.Authority, _naiveCache.SetUpNaiveSessionCache(userObjectID, _context.HttpContext.Session));
             ClientCredential credential = new ClientCredential(_adSettings.ClientId, _adSettings.ClientSecret);
-
-            var result = await authContextWrapperObject.AcquireTokenSilentAsync(_adSettings.ProductResourceId, credential, GetUserIdentifier());
+            var result = await authContext.AcquireTokenSilentAsync(_adSettings.ProductResourceId, credential, new UserIdentifier(userObjectID, UserIdentifierType.UniqueId));
             return result;
-        }
-
-        public UserIdentifier GetUserIdentifier()
-        {
-            return new UserIdentifier(this.userObjectID, UserIdentifierType.UniqueId);
         }
 
         public bool FlushProductsAuthenticationCache()
@@ -80,7 +63,7 @@ namespace ProductListWebApp.Services
 
             try
             {
-                AuthenticationContext authContext = new AuthenticationContext(AzureAdOptions.Settings.Authority, isNaiveCached);
+                AuthenticationContext authContext = new AuthenticationContext(AzureAdOptions.Settings.Authority, _naiveCache.SetUpNaiveSessionCache(userObjectID, _context.HttpContext.Session));
                 var ProductTokens = authContext.TokenCache.ReadItems().Where(a => a.Resource == AzureAdOptions.Settings.ProductResourceId);
                 foreach (TokenCacheItem tci in ProductTokens)
                     authContext.TokenCache.DeleteItem(tci);
@@ -90,6 +73,16 @@ namespace ProductListWebApp.Services
                 isSuccess = false;
             }
             return isSuccess;
+        }
+
+        public UserIdentifier GetUserIdentifier()
+        {
+            return new UserIdentifier(this.userObjectID, UserIdentifierType.UniqueId);
+        }
+
+        public bool IsNaiveCached(string userId, ISession session)
+        {
+            return _naiveCache.SetUpNaiveSessionCache(userId, _context.HttpContext.Session);
         }
     }
 }
