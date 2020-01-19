@@ -16,12 +16,34 @@ namespace ProductListWebApp.Services
 {
     public class ProductAuthenticationService : IProductAuthenticationService
     {
-        public ProductAuthenticationService(IHttpContextAccessor context)
+        public string userObjectID
+        {
+            get
+            {
+                return _userObjectID;
+            }
+            set
+            {
+                _userObjectID = value;
+            }
+        }
+
+        public AuthenticationContextWrapper authContext { get; set; }
+        public ProductAuthenticationService(IHttpContextAccessor context, IAzureAD ad, INaiveSessionCache naiveCache, IAuthenticationContextWrapper authWrapper)
         {
             _context = context;
-
+            _ad = ad;
+            _adSettings = _ad.InitAzureSettings();
+            _userObjectID = _ad.GetUserID(_context);
+            _naiveCache = naiveCache;
+            _authWrapper = authWrapper;
         }
         private readonly IHttpContextAccessor _context;
+        private readonly IAzureAD _ad;
+        public AzureAdOptions _adSettings;
+        private string _userObjectID;
+        private INaiveSessionCache _naiveCache;
+        private IAuthenticationContextWrapper _authWrapper;
 
         public ISession _session { get; private set; }
 
@@ -29,14 +51,13 @@ namespace ProductListWebApp.Services
         {
             // To fetch the already logged in user object
             var claim = (ClaimsPrincipal)Thread.CurrentPrincipal;
-            string userObjectID = _context.HttpContext.User != null ? (_context.HttpContext.User.FindFirst("http://schemas.microsoft.com/identity/claims/objectidentifier"))?.Value : "1";
-
             // Using ADAL.Net, get a bearer token to access the ProductService
-            AuthenticationContextWrapper authContext = new AuthenticationContextWrapper(AzureAdOptions.Settings.Authority, new NaiveSessionCache(userObjectID, _context.HttpContext.Session));
-            ClientCredential credential = new ClientCredential(AzureAdOptions.Settings.ClientId, AzureAdOptions.Settings.ClientSecret);
+            //this.authContext = new AuthenticationContextWrapper(_adSettings.Authority, _naiveCache.SetUpNaiveSessionCache(userObjectID, _context.HttpContext.Session));
+            this.authContext = _authWrapper.SetAuthenticationContext(_adSettings.Authority, _naiveCache.SetUpNaiveSessionCache(userObjectID, _context.HttpContext.Session));
+           
+            ClientCredential credential = new ClientCredential(_adSettings.ClientId, _adSettings.ClientSecret);
 
-            //var result = await authContext.AcquireTokenAsync(AzureAdOptions.Settings.ProductResourceId, credential);
-            var result = await authContext.AcquireTokenSilentAsync(AzureAdOptions.Settings.ProductResourceId, credential, new UserIdentifier(userObjectID, UserIdentifierType.UniqueId));
+            var result = await authContext.AcquireTokenSilentAsync(_adSettings.ProductResourceId, credential, new UserIdentifier(userObjectID, UserIdentifierType.UniqueId));
             return result;
         }
 
@@ -46,8 +67,7 @@ namespace ProductListWebApp.Services
 
             try
             {
-                string userObjectID = _context.HttpContext.User != null ? (_context.HttpContext.User.FindFirst("http://schemas.microsoft.com/identity/claims/objectidentifier"))?.Value : "1";
-                AuthenticationContext authContext = new AuthenticationContext(AzureAdOptions.Settings.Authority, new NaiveSessionCache(userObjectID, _context.HttpContext.Session));
+                AuthenticationContext authContext = new AuthenticationContext(AzureAdOptions.Settings.Authority, _naiveCache.SetUpNaiveSessionCache(userObjectID, _context.HttpContext.Session));
                 var ProductTokens = authContext.TokenCache.ReadItems().Where(a => a.Resource == AzureAdOptions.Settings.ProductResourceId);
                 foreach (TokenCacheItem tci in ProductTokens)
                     authContext.TokenCache.DeleteItem(tci);

@@ -7,28 +7,37 @@ using Microsoft.IdentityModel.Clients.ActiveDirectory;
 
 namespace ProductWebApp
 {
-    public class NaiveSessionCache : TokenCache
+    public class NaiveSessionCache : TokenCache, INaiveSessionCache
     {
         private static readonly object FileLock = new object();
         string UserObjectId = string.Empty;
         string CacheId = string.Empty;
         ISession Session = null;
 
-        public NaiveSessionCache(string userId, ISession session)
+        public bool SetUpNaiveSessionCache(string userId, ISession session)
         {
             UserObjectId = userId;
             CacheId = UserObjectId + "_TokenCache";
             Session = session;
             this.AfterAccess = AfterAccessNotification;
             this.BeforeAccess = BeforeAccessNotification;
-            Load();
+            return Load();
+
         }
 
-        public void Load()
+        public bool Load()
         {
             lock (FileLock)
             {
-                this.Deserialize(Session.Get(CacheId));
+                try
+                {
+                    this.Deserialize(Session.Get(CacheId));
+                    return true;
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
             }
         }
 
@@ -58,13 +67,13 @@ namespace ProductWebApp
 
         // Triggered right before ADAL needs to access the cache.
         // Reload the cache from the persistent store in case it changed since the last access.
-        void BeforeAccessNotification(TokenCacheNotificationArgs args)
+        public void BeforeAccessNotification(TokenCacheNotificationArgs args)
         {
             Load();
         }
 
         // Triggered right after ADAL accessed the cache.
-        void AfterAccessNotification(TokenCacheNotificationArgs args)
+        public void AfterAccessNotification(TokenCacheNotificationArgs args)
         {
             // if the access operation resulted in a cache update
             if (this.HasStateChanged)

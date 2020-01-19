@@ -77,7 +77,20 @@ namespace ProductListWebApp.Utils
 
             this.Context = new AuthenticationContext(authority, validateAuthority);
         }
+        public AuthenticationContextWrapper()
+        {
 
+        }
+
+        public AuthenticationContextWrapper SetAuthenticationContext(string authority, bool validateAuthority)
+        {
+            if (string.IsNullOrWhiteSpace(authority))
+            {
+                throw new ArgumentNullException(nameof(authority));
+            }
+
+            return new AuthenticationContextWrapper(authority, validateAuthority);
+        }
         /// <summary>
         /// Initialises a new instance of the <see cref="AuthenticationContextWrapper"/> class.
         /// </summary>

@@ -20,18 +20,32 @@ namespace ProductListWebApp.Services
     {
         public HttpRequestMessage GetHttpRequestMessageForGet(string AccessToken, string Url)
         {
-            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, AzureAdOptions.Settings.ProductBaseAddress + Url);
-            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", AccessToken);
-            return request;
+            try
+            {
+                HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, AzureAdOptions.Settings.ProductBaseAddress + Url);
+                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", AccessToken);
+                return request;
+            }
+            catch (Exception)
+            {
+                return new HttpRequestMessage {};
+            }
         }
 
         public HttpRequestMessage GetHttpRequestMessageForPost(string NewProduct, string AccessToken, string url)
         {
-            HttpContent requestContentProduct = new StringContent(NewProduct, System.Text.Encoding.UTF8, "application/json");
-            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, AzureAdOptions.Settings.ProductBaseAddress + url);
-            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", AccessToken);
-            request.Content = requestContentProduct;
-            return request;
+            try
+            {
+                HttpContent requestContentProduct = new StringContent(NewProduct, System.Text.Encoding.UTF8, "application/json");
+                HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, AzureAdOptions.Settings.ProductBaseAddress + url);
+                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", AccessToken);
+                request.Content = requestContentProduct;
+                return request;
+            }
+            catch (Exception)
+            {
+                return new HttpRequestMessage { };
+            }
         }
 
     }

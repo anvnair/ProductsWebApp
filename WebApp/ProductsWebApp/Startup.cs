@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using ProductListWebApp.Services;
 using ProductListWebApp.Utils;
+using ProductWebApp;
 
 namespace ProductApp
 {
@@ -23,6 +24,9 @@ namespace ProductApp
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddTransient<IAuthenticationContextWrapper, AuthenticationContextWrapper>();
+            services.AddTransient<INaiveSessionCache, NaiveSessionCache>();
+            services.AddTransient<IAzureAD, AzureAD>();
             services.AddTransient<ISerializationHelper, SerializationHelper>();
             services.AddTransient<IHttpHelperService, HttpHelperService>();
             services.AddHttpClient<IProductService, ProductServices>();

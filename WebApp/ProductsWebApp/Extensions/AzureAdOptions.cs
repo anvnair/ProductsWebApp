@@ -6,6 +6,8 @@
     /// </summary>
     public class AzureAdOptions
     {
+        private string _authority;
+
         /// <summary>
         /// ClientId (Application Id) of this Web Application
         /// </summary>
@@ -44,7 +46,11 @@
         {
             get
             {
-                return $"{Instance}{TenantId}";
+                return $"{Instance}{TenantId}" == string.Empty ? "Empty Authority" : $"{Instance}{TenantId}";
+            }
+            set
+            {
+                _authority = value;
             }
         }
 

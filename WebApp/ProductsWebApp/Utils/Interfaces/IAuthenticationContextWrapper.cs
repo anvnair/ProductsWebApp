@@ -18,6 +18,8 @@ namespace ProductListWebApp.Utils
         /// </summary>
         AuthenticationContext Context { get; }
 
+        AuthenticationContextWrapper SetAuthenticationContext(string authority, bool validateAuthority);
+
         /// <summary>
         /// Gets address of the authority to issue token.
         /// </summary>

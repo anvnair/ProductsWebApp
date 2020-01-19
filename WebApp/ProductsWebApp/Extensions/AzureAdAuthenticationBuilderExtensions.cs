@@ -64,7 +64,8 @@ namespace Microsoft.AspNetCore.Authentication
             {
                 // Acquire a Token for the Graph API and cache it using ADAL. In the ProductController, we'll use the cache to acquire a token for the Product List API
                 string userObjectId = (context.Principal.FindFirst("http://schemas.microsoft.com/identity/claims/objectidentifier"))?.Value;
-                var authContext = new AuthenticationContext(context.Options.Authority, new NaiveSessionCache(userObjectId, context.HttpContext.Session));
+                NaiveSessionCache _naiveCache = new NaiveSessionCache();
+                var authContext = new AuthenticationContext(context.Options.Authority, _naiveCache.SetUpNaiveSessionCache(userObjectId, context.HttpContext.Session));
                 var credential = new ClientCredential(context.Options.ClientId, context.Options.ClientSecret);
 
                 var authResult = await authContext.AcquireTokenByAuthorizationCodeAsync(context.TokenEndpointRequest.Code,
