@@ -1,28 +1,16 @@
+#region Namespaces
 using System;
 using System.Collections.Generic;
-using System.Net;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Security.Claims;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using MediatR;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Clients.ActiveDirectory;
-using Moq;
-using Moq.Protected;
-using Newtonsoft.Json;
-using NUnit.Framework;
-using ProductListWebApp.Models;
-using ProductListWebApp.Services;
-using ProductListWebApp.Utils;
-using ProductWebApp.Controllers;
-using ProductWebApp.Models;
+#endregion
 
+
+/// <summary>
+/// To Mock session
+/// </summary>
 namespace ProductControllerWebApp.Test
 {
     public class MockHttpSession : ISession
@@ -70,16 +58,6 @@ namespace ProductControllerWebApp.Test
         {
             sessionStorage.Clear();
         }
-
-        //Task ISession.CommitAsync()
-        //{
-        //    throw new NotImplementedException();
-        //}
-
-        //Task ISession.LoadAsync()
-        //{
-        //    throw new NotImplementedException();
-        //}
 
         void ISession.Remove(string key)
         {

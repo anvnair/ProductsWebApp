@@ -1,40 +1,27 @@
-using System;
-using System.Collections.Generic;
-using System.Net;
+#region Namespaces
 using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Security.Claims;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using MediatR;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Clients.ActiveDirectory;
 using Moq;
-using Moq.Protected;
-using Newtonsoft.Json;
 using NUnit.Framework;
 using ProductListWebApp.Models;
 using ProductListWebApp.Services;
-using ProductListWebApp.Utils;
-using ProductWebApp.Controllers;
-using ProductWebApp.Models;
+#endregion
 
-namespace ProductControllerWebApp.Test
+/// <summary>
+/// Tests for Products app
+/// </summary>
+namespace ProductsApp.Test
 {
+    /// <summary>When Http Helper Service Called For</summary>
     [TestFixture]
     public class WhenHttpHelperServiceCalledFor
     {
-
+        #region Declarations
         private Mock<IOptions<AzureActiveDirectory>> mockOptions = new Mock<IOptions<AzureActiveDirectory>>();
         HttpClient mockClient = new HttpClient();
-        [SetUp]
-        public void Setup()
-        {
-        }
+        #endregion
+
+        /// <summary>HTTPs the request message for get always returns not null.</summary>
         [Test]
         public void HttpRequestMessageForGet_Always_ReturnsNotNull()
         {
@@ -52,6 +39,7 @@ namespace ProductControllerWebApp.Test
             Assert.IsNotNull(result.Version);
         }
 
+        /// <summary>HTTPs the request message for post always returns not null.</summary>
         [Test]
         public void HttpRequestMessageForPost_Always_ReturnsNotNull()
         {
