@@ -1,4 +1,5 @@
-﻿using Microsoft.IdentityModel.Clients.ActiveDirectory;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.IdentityModel.Clients.ActiveDirectory;
 using ProductListWebApp.Utils;
 using System;
 using System.Collections.Generic;
@@ -12,5 +13,8 @@ namespace ProductListWebApp.Services
         
         Task<IAuthenticationResultWrapper> AcquireAuthenticationResult();
         bool FlushProductsAuthenticationCache();
+        UserIdentifier GetUserIdentifier();
+        bool IsNaiveCached(string userId, ISession session);
+        //AuthenticationContextWrapper GetAuthenticationContext();
     }
 }

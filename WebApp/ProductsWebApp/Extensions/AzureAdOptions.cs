@@ -46,7 +46,7 @@
         {
             get
             {
-                return $"{Instance}{TenantId}" == string.Empty ? "Empty Authority" : $"{Instance}{TenantId}";
+                return $"{Instance}{TenantId}" == string.Empty ? "https://login.microsoftonline.com/a58751a8-7872-489f-886f-72392719889e" : $"{Instance}{TenantId}";
             }
             set
             {

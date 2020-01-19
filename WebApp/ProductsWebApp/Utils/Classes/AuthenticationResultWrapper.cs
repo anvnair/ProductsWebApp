@@ -14,7 +14,11 @@ namespace ProductListWebApp.Utils
     public class AuthenticationResultWrapper : IAuthenticationResultWrapper
     {
         private bool _disposed;
-         
+
+        public AuthenticationResultWrapper()
+        {
+
+        }
         /// <summary>
         /// Initialises a new instance of the <see cref="AuthenticationResultWrapper"/> class.
         /// </summary>

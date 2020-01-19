@@ -718,7 +718,7 @@ namespace ProductListWebApp.Utils
             var result = await this.Context.AcquireTokenSilentAsync(resource, clientCredential, userId).ConfigureAwait(false);
             return new AuthenticationResultWrapper(result);
         }
-
+      
         /// <summary>
         /// Acquires security token without asking for user credential.
         /// </summary>

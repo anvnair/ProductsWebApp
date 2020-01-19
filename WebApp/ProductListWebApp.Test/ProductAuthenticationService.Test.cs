@@ -43,82 +43,67 @@ namespace ProductControllerWebApp.Test
         {
         }
 
+        protected Mock<INaiveSessionCache> IsNaiveCached { get; private set; }
         [Test]
         public async Task NeededAuthenticationResult_Always_ReturnsStatusOK()
         {
             // ARRANGE
-            Mock<IHttpContextAccessor> httpContextAccessor = new Mock<IHttpContextAccessor>();
             Mock<IProductAuthenticationService> productAuthenticationServiceMock = new Mock<IProductAuthenticationService>();
+            Mock<IHttpContextAccessor> httpContextAccessorMock = new Mock<IHttpContextAccessor>();
+            Mock<INaiveSessionCache> _naiveCacheMock = new Mock<INaiveSessionCache>();
             Mock<IAuthenticationContextWrapper> authContextMock = new Mock<IAuthenticationContextWrapper>();
-            var authResult = new Mock<IAuthenticationResultWrapper>();
-            var authContext = new Mock<IAuthenticationContextWrapper>();
-            //  var wrapper = new AdalWrapper(this.AuthenticationContext.Object);
+            Mock<IAuthenticationResultWrapper> authResult = new Mock<IAuthenticationResultWrapper>();
 
-            var resourceUrl = "http://localhost";
-            var clientId = "CLIENT_ID";
-            var clientSecret = "CLIENT_SECRET";
-            var accessToken = "ACCESS_TOKEN";
-
+            //Mock Claims Principal
             IList<Claim> claimCollection = new List<Claim>
                 {
                     new Claim("name", "John Doe")
                 };
-
             var identityMock = new Mock<ClaimsIdentity>();
             identityMock.Setup(x => x.Claims).Returns(claimCollection);
-
-            var context = new DefaultHttpContext();
-            context.Session = new MockHttpSession();
             var cp = new Mock<ClaimsPrincipal>();
             cp.Setup(m => m.HasClaim(It.IsAny<string>(), It.IsAny<string>())).Returns(true);
             cp.Setup(m => m.Identity).Returns(identityMock.Object);
             Thread.CurrentPrincipal = cp.Object;
 
-            authResult.SetupGet(p => p.AccessToken).Returns(accessToken);
-            authContext.Setup(p => p.AcquireTokenAsync(It.IsAny<string>(), It.IsAny<ClientCredential>())).ReturnsAsync(authResult.Object);
+            // Ihttp Context mock
+            var context = new DefaultHttpContext();
+            context.Session = new MockHttpSession();
+            httpContextAccessorMock.SetupGet(p => p.HttpContext).Returns(context);
 
-            //  var result = await wrapper.AcquireTokenAsync(resource, clientId, clientSecret).ConfigureAwait(false);
-            // result.AccessToken.Should().BeEquivalentTo(accessToken);
-            httpContextAccessor.SetupGet(p => p.HttpContext).Returns(context);
-
-            //productAuthenticationServiceMock.Setup(pas => pas.AcquireAuthenticationResult()).ReturnsAsync(authResult.Object);
-
+            //IAzure AD
             Mock<IAzureAD> _azureAD = new Mock<IAzureAD>();
-            Mock<INaiveSessionCache> _naiveCache = new Mock<INaiveSessionCache>();
-            _naiveCache.Setup(n => n.SetUpNaiveSessionCache("userId", context.Session)).Returns(true);
-            _azureAD.Setup(a => a.GetUserID(httpContextAccessor.Object)).Returns("httpContextAccessor");
+            _azureAD.Setup(a => a.GetUserID(httpContextAccessorMock.Object)).Returns("8999ffbe-8d75-4f86-b499-179f7728ae44");
             _azureAD.Setup(ad => ad.InitAzureSettings()).Returns(new AzureAdOptions
             {
-                Authority = "Authority",
+                Authority = "https://login.microsoftonline.com/a58751a8-7872-489f-886f-72392719889e",
                 ClientId = "ClientId",
                 ClientSecret = "ClientSecret",
                 ProductResourceId = "ProductResourceId"
             });
-            authContextMock.Setup(a => a.SetAuthenticationContext("Authority", true)).Returns(new AuthenticationContextWrapper("", true) { });
 
-            var productAuthenticationService = new ProductAuthenticationService(httpContextAccessor.Object, _azureAD.Object, _naiveCache.Object, authContextMock.Object);
-            Task<IAuthenticationResultWrapper> res = productAuthenticationService.AcquireAuthenticationResult();
-            /*
-                        HttpClientHelper httpClientHelper = new HttpClientHelper();
-                        var httpClient = httpClientHelper.GetTestHttpClient();
-                        Mock<IProductService> productService = new Mock<IProductService>();
-                        Mock<ISerializationHelper> serializationHelper = new Mock<ISerializationHelper>();
-                        Mock<IHttpHelperService> httpHelperService = new Mock<IHttpHelperService>();
-                        //var accessToken = "ACCESS_TOKEN";
-                        var newProduct = "ACCESS_TOKEN";
-                        httpHelperService.Setup(s => s.GetHttpRequestMessageForPost(newProduct, accessToken, "/api/Product")).Returns(new HttpRequestMessage()
-                        {
-                            Content = new StringContent("[{'id':1,'value':'1'}]"),
-                        });
-                        var _productServices = new ProductServices(httpClient, serializationHelper.Object, httpHelperService.Object);
+            //INaive Cache
+            _naiveCacheMock.Setup(n => n.SetUpNaiveSessionCache("8999ffbe-8d75-4f86-b499-179f7728ae44", context.Session)).Returns(true);
 
-                        // ACT
-                        var result = await _productServices
-                           .CreateProduct(newProduct, accessToken);
+            //Iauthentication context mock            
+            authContextMock.Setup(p => p.AcquireTokenAsync(It.IsAny<string>(), It.IsAny<ClientCredential>())).ReturnsAsync(authResult.Object);
+            authContextMock.Setup(a => a.SetAuthenticationContext("https://login.microsoftonline.com/a58751a8-7872-489f-886f-72392719889e", true)).Returns(new AuthenticationContextWrapper("https://login.microsoftonline.com/a58751a8-7872-489f-886f-72392719889e", true) { });
+            authContextMock.Setup(p => p.AcquireTokenSilentAsync(It.IsAny<string>(), It.IsAny<ClientCredential>(), productAuthenticationServiceMock.Object.GetUserIdentifier())).ReturnsAsync(authResult.Object);
 
-                        // ASSERT
-                        Assert.AreEqual(HttpStatusCode.OK, result.StatusCode);
-                        */
+            //IAuth Result
+            var accessToken = "ACCESS_TOKEN";
+            authResult.SetupGet(p => p.AccessToken).Returns(accessToken);
+
+            productAuthenticationServiceMock.Setup(s => s.IsNaiveCached("user", context.Session)).Returns(true);
+            // productAuthenticationServiceMock.Setup(s => s.GetUserIdentifier()).Returns(new UserIdentifier("id", UserIdentifierType.UniqueId) { });
+            productAuthenticationServiceMock.Setup(s => s.AcquireAuthenticationResult()).ReturnsAsync(authResult.Object);
+
+            //Act
+            var productAuthenticationService = new ProductAuthenticationService(httpContextAccessorMock.Object, _azureAD.Object, _naiveCacheMock.Object, authContextMock.Object);
+
+            //Assert
+            var res = productAuthenticationService.AcquireAuthenticationResult();
+
         }
         [Test]
         public async Task RequestedAllProducts_Always_ReturnsStatusOK()
@@ -144,59 +129,7 @@ namespace ProductControllerWebApp.Test
             // ASSERT
             Assert.AreEqual(HttpStatusCode.OK, result.StatusCode);
 
-            //result.Should().NotBeNull(); // this is fluent assertions here...
-            //result.Id.Should().Be(1);
-
-            //// also check the 'http' call was like we expected it
-            //var expectedUri = new Uri("http://test.com/api/test/whatever");
-
-            //handlerMock.Protected().Verify(
-            //   "SendAsync",
-            //   Times.Exactly(1), // we expected a single external request
-            //   ItExpr.Is<HttpRequestMessage>(req =>
-            //      req.Method == HttpMethod.Get  // we expected a GET request
-            //      && req.RequestUri == expectedUri // to this uri
-            //   ),
-            //   ItExpr.IsAny<CancellationToken>()
-            //);
         }
-        //[Test]
-        //public async Task Get_WhenAllUsers_ReturnsAllUsers()
-        //{
-        //    //Arrange
-        //    // AuthenticationResultWrapper _authResult = new AuthenticationResultWrapper();
-        //    Mock<IProductAuthenticationService> productAuthenticationService = new Mock<IProductAuthenticationService>();
-        //    Mock<IProductService> productService = new Mock<IProductService>();
-        //    Mock<ISerializationHelper> serializationHelper = new Mock<ISerializationHelper>();
-        //    Mock<HttpResponse> httpResponse = new Mock<HttpResponse>();
-        //    var authResult = new Mock<IAuthenticationResultWrapper>();
-        //    var authContext = new Mock<IAuthenticationContextWrapper>();
-        //    //var wrapper = new AdalWrapper(this.AuthenticationContext.Object);
-
-        //    var resourceUrl = "http://localhost";
-        //    var clientId = "CLIENT_ID";
-        //    var clientSecret = "CLIENT_SECRET";
-        //    var accessToken = "ACCESS_TOKEN";
-
-        //    authResult.SetupGet(p => p.AccessToken).Returns(accessToken);
-        //    authContext.Setup(p => p.AcquireTokenAsync(It.IsAny<string>(), It.IsAny<ClientCredential>())).ReturnsAsync(authResult.Object);
-        //    productAuthenticationService.Setup(pas => pas.AcquireAuthenticationResult()).ReturnsAsync(authResult.Object);
-        //    //productService.Setup(ps => ps.GetProductsList(accessToken)).ReturnsAsync(httpResponse.Object);
-
-
-        //    //Act
-        //    var productController = new ProductController(productAuthenticationService.Object, productService.Object, serializationHelper.Object);
-        //    var result = await productController.Index();
-
-        //    //Assert
-
-
-        //    //HttpContent content = new StringContent(JsonConvert.SerializeObject(GetAllProductItem()), Encoding.UTF8, "application/json");
-        //    //mockOptions.Setup(p => p.Value).Returns(azureAd);
-        //    //var controller = new ProductController();
-        //    //var actionResult = await controller.Index() as Task<IActionResult>;
-        //    //Assert.IsInstanceOf<ViewResult>(actionResult);
-        //}
         private List<ProductItemViewModel> GetAllProductItem()
         {
             var productItemList = new List<ProductItemViewModel> {
